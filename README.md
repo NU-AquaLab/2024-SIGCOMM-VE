@@ -1,7 +1,35 @@
 # Ten years of the Venezuelan crisis
 
-This repository contains the code, data, and figure the paper entitled _Ten years of the Venezuelan crisis - An Internet perspective_ that appear at [ACM SIGCOMM 2024](https://conferences.sigcomm.org/sigcomm/2024/). This paper is authored by Esteban Carisimo, Rashna Kumar, Caleb J. Wang and Fabián E. Bustamante. The paper is available [here](https://estcarisimo.github.io/assets/pdf/papers/2024-sigcomm-venezuela.pdf).
+This repository contains the code, data, and figures of the paper entitled _Ten years of the Venezuelan crisis - An Internet perspective_ that appear at [ACM SIGCOMM 2024](https://conferences.sigcomm.org/sigcomm/2024/). This paper is authored by Esteban Carisimo, Rashna Kumar, Caleb J. Wang, Santiago Klein and Fabián E. Bustamante. The paper is available [here](https://estcarisimo.github.io/assets/pdf/papers/2024-sigcomm-venezuela.pdf).
 
+
+## Setup Instructions
+
+Before running the notebooks, we highly recommend creating a virtual environment to manage dependencies.
+
+### Using a Virtual Environment (non-Conda users)
+
+1. Create a virtual environment:
+   ```bash
+   python3 -m venv .venezuela
+   ```
+
+2. Activate the virtual environment:
+   ```bash
+   source .venezuela/bin/activate
+   ```
+
+3. Install the IPython kernel for the virtual environment:
+   ```bash
+   ipython kernel install --user --name=.venezuela
+   ```
+
+### All users
+
+4. Install the required Python packages from `requirements.txt`:
+   ```bash
+   pip3 install -r requirements.txt
+   ```
 
 
 ## Repository structure
