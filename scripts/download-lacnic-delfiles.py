@@ -1,79 +1,58 @@
 """
-This script ???
-
-To be filled
+This script automates the download of delegated internet number resource statistics from LACNIC. 
+It checks for the existence of daily records from January 2003 to the present day and downloads them if they are not already stored locally. 
+The data is saved under 'data/raw/08-delegated-lacnic/'.
 """
-import os.path
+
 import os
-from datetime import date, datetime, timedelta
-from dateutil.relativedelta import *
-
-import rootpath
 import wget
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
+import rootpath
 
-# from transitlib.cfgLoader import cfgLoader
-
-####################################################################
-
+# Set the working directory to the root of the git repository
 path = rootpath.detect(pattern=".git")
 os.chdir(path)
 
-# cfg = cfgLoader()
-
-####################################################################
-
+# Define the start date for the data collection
 STARTS = datetime(2003, 1, 1)
 
-
-
 def _create_dir(filename):
+    """
+    Create a directory for the given filename if it doesn't already exist.
 
-    dir_to_create = "/".join(filename.split("/")[:-1])
-
-    if not os.path.exists('{}'.format(dir_to_create)):
-        os.makedirs('{}'.format(dir_to_create))
+    Parameters
+    ----------
+    filename : str
+        The path to the file for which the directory needs to be created.
+    """
+    directory = os.path.dirname(filename)
+    if not os.path.exists(directory):
+        os.makedirs(directory)
 
 def main():
     """
-    Thi is an example script.
+    Main function to manage the downloading process of delegated statistics from LACNIC.
 
-    It seems that it has to have THIS docstring with a summary line, a blank line
-    and sume more text like here. Wow.
+    Iterates from a starting date to the current date, constructs the download URL and local storage path for each dataset, 
+    then downloads it if it doesn't exist locally.
     """
-    # creates output dir
-
-
+    current_date = datetime.today()
     d = STARTS
-    ends = datetime.today()
 
-    while d < ends:
-
+    while d < current_date:
         date_str = d.strftime("%Y%m%d")
-
-        for rir in ["lacnic"]:
-
-
-            url = "https://ftp.lacnic.net/pub/stats/lacnic/delegated-lacnic-{}".format(date_str)
-            filename ="data/raw/delfiles/{}".format(url.split("/")[-1])
-
-
-            if not os.path.exists(filename):
-                _create_dir(filename)
-
-                try:
-                    wget.download(
-                        url,
-                        out=filename
-                    )
-                except:
-                    print(f"{date_str} not found")
-
+        url = f"https://ftp.lacnic.net/pub/stats/lacnic/delegated-lacnic-{date_str}"
+        filename = f"data/raw/08-delegated-lacnic/delegated-lacnic-{date_str}"
+        
+        if not os.path.exists(filename):
+            _create_dir(filename)
+            try:
+                wget.download(url, out=filename)
+            except Exception as e:
+                print(f"Failed to download {date_str}: {str(e)}")
 
         d += relativedelta(months=+1)
 
-
-
-
 if __name__ == "__main__":
-    # execute only if run as a script
     main()

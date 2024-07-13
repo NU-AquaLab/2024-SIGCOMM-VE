@@ -1,101 +1,76 @@
 """
-This script ???
+This script downloads routing data files from the CAIDA dataset by automatically generating URLs for required dates and then fetching the files.
 
-To be filled
+The script uses CAIDA's Routeviews Prefix-to-AS mapping data to provide historical route views from 1998 to the current date. Files are downloaded monthly and stored locally.
 """
 
 import os
-import glob
-from datetime import date, datetime, timedelta
-from dateutil.relativedelta import *
-
 import requests
 from bs4 import BeautifulSoup
-import rootpath
 import wget
+import rootpath
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 
-####################################################################
-
+# Set the working directory to the root of the git repository
 path = rootpath.detect(pattern=".git")
 os.chdir(path)
 
-####################################################################
-
+# Define the start date for the data collection
 STARTS = datetime(1998, 1, 1)
-# STARTS = datetime(2023, 1, 1)
 
 def get_resource_to_download(url):
     """
-    Thi is an example script.
+    Fetch the filename of the first available Routeviews Prefix-to-AS data file from the specified URL.
 
-    It seems that it has to have THIS docstring with a summary line, a blank line
-    and sume more text like here. Wow.
+    Parameters
+    ----------
+    url : str
+        The URL to fetch the available data files list.
+
+    Returns
+    -------
+    str
+        The filename of the first relevant data file, if found; otherwise, an empty string.
     """
     file_name = ''
-    # Gets pfix2as archive website
     response = requests.get(url)
 
     if response.status_code == 200:
-        # Data transformation
-        soup = BeautifulSoup(response.text)
-        # Look for href to files
-        pfix2as_website_href_list = soup.find_all('a')
-        for href in pfix2as_website_href_list:
-            # First file that contains 'routeviews-rv2-' is the first monthly snapshot
+        soup = BeautifulSoup(response.text, 'html.parser')
+        for href in soup.find_all('a'):
             if 'routeviews-rv2-' in href.text:
                 file_name = href.text
                 break
 
     return file_name
 
-
 def main():
     """
-    Thi is an example script.
+    Main function to download Routeviews Prefix-to-AS mapping data files from CAIDA for each month starting from January 1998 to the current month.
 
-    It seems that it has to have THIS docstring with a summary line, a blank line
-    and sume more text like here. Wow.
+    The function constructs URLs for each month, checks if the file already exists, and if not, downloads and stores it locally.
     """
-    # creates output dir
-
-
+    current_date = datetime.today()
     d = STARTS
-    ends = datetime.today()
 
-    while d < ends:
-
+    while d < current_date:
         date_str = d.strftime("%Y%m%d")
-
         filename = f"routeviews-rv2-{d.year}{d.month:02d}{d.day:02d}.pfx2as.gz"
         
         if not os.path.exists(filename):
+            download_url = f"http://data.caida.org/datasets/routing/routeviews-prefix2as/{d.year}/{d.month:02d}/"
+            pfix2as_file_name = get_resource_to_download(download_url)
 
-            pfix2as_file_name = get_resource_to_download(
-                f'http://data.caida.org/datasets/routing/routeviews-prefix2as/{d.year}/{d.month:02d}/'
-            )
-
-            if pfix2as_file_name != '':
-
-
-                # wget.download(
-                #     f"http://data.caida.org/datasets/routing/routeviews-prefix2as/{d.year}/{d.month:02d}/{pfix2as_file_name}",
-                #     out=f"data/raw/pfx2as/{filename}"
-                # )
-
+            if pfix2as_file_name:
                 try:
-                    # https://data.caida.org/datasets/routing/routeviews-prefix2as/2008/12/routeviews-rv2-20081229-1302.pfx2as.gz
-                    print(f"http://data.caida.org/datasets/routing/routeviews-prefix2as/{d.year}/{d.month:02d}/{pfix2as_file_name}",)
-                    wget.download(
-                        f"http://data.caida.org/datasets/routing/routeviews-prefix2as/{d.year}/{d.month:02d}/{pfix2as_file_name}",
-                        out=f"data/raw/pfx2as/{filename}"
-                    )
-                except:
-                    print(f"{date_str} not found")
+                    full_url = f"{download_url}{pfix2as_file_name}"
+                    print(full_url)
+                    wget.download(full_url, out=f"data/raw/02-pfx2as/{filename}")
+                except Exception as e:
+                    print(f"Failed to download {date_str}: {str(e)}")
 
-        d += relativedelta(months=+1)
-
-
+        d += relativedelta(months=1)
 
 if __name__ == "__main__":
-    # execute only if run as a script
     main()
