@@ -6,53 +6,43 @@ The data is saved under 'data/raw/08-delegated-lacnic/'.
 
 import os
 import wget
+
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-import rootpath
+from script_utils import configure_path, create_dir, log_info
 
-# Set the working directory to the root of the git repository
-path = rootpath.detect(pattern=".git")
-os.chdir(path)
+configure_path()
 
 # Define the start date for the data collection
-STARTS = datetime(2003, 1, 1)
+START_DATE = datetime(2004, 1, 1)
 
-def _create_dir(filename):
-    """
-    Create a directory for the given filename if it doesn't already exist.
-
-    Parameters
-    ----------
-    filename : str
-        The path to the file for which the directory needs to be created.
-    """
-    directory = os.path.dirname(filename)
-    if not os.path.exists(directory):
-        os.makedirs(directory)
 
 def main():
     """
     Main function to manage the downloading process of delegated statistics from LACNIC.
 
-    Iterates from a starting date to the current date, constructs the download URL and local storage path for each dataset, 
+    Iterates from a starting date to the current date, constructs the download URL and local storage path for each dataset,
     then downloads it if it doesn't exist locally.
     """
     current_date = datetime.today()
-    d = STARTS
+    d = START_DATE
 
     while d < current_date:
         date_str = d.strftime("%Y%m%d")
         url = f"https://ftp.lacnic.net/pub/stats/lacnic/delegated-lacnic-{date_str}"
         filename = f"data/raw/08-delegated-lacnic/delegated-lacnic-{date_str}"
-        
+
         if not os.path.exists(filename):
-            _create_dir(filename)
+            create_dir(filename)
+
             try:
+                log_info("LACNIC delegations", d)
                 wget.download(url, out=filename)
             except Exception as e:
                 print(f"Failed to download {date_str}: {str(e)}")
 
         d += relativedelta(months=+1)
+
 
 if __name__ == "__main__":
     main()
