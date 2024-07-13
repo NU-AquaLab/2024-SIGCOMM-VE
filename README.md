@@ -48,8 +48,8 @@ Description of files/directories:
 - `./data/raw/03-15-peeringdb`: This folder contains [CAIDA's monthly snapshots of PeeringDB data](https://www.caida.org/catalog/datasets/peeringdb/). To populate this directory, please run the script `./scripts/download-peeringdb.py`.
 - `./data/raw/10-peeringdb`: This is a mirror directory of `./data/raw/03-15-peeringdb`, containing identical data.
 - `./data/raw/05-facebook-ipv6`: This directory Meta's report on IPv6 adoption across each country in the LACNIC region.
-- `./data/processed/08-asrel`: This folder provides [CAIDA's AS relatioships](https://www.caida.org/catalog/datasets/as-relationships/) files. Run `./scripts/download_asrel.py` to populate this directory.
-- `./data/processed/08-delegated-lacnic`: This directory contains [LACNIC delegation files](https://ftp.lacnic.net/pub/stats/lacnic/). To populate this directory, run `./scripts/download-lacnic-delfiles.py`.
+- `./data/raw/08-asrel`: This folder provides [CAIDA's AS relatioships](https://www.caida.org/catalog/datasets/as-relationships/) files. Run `./scripts/download_asrel.py` to populate this directory.
+- `./data/raw/08-delegated-lacnic`: This directory contains [LACNIC delegation files](https://ftp.lacnic.net/pub/stats/lacnic/). To populate this directory, run `./scripts/download-lacnic-delfiles.py`.
 - `./data/raw/10-apnic-eyeballs`: Snapshot from [APNIC's Eyebeall Population Estimates](https://stats.labs.apnic.net/aspop) as of March 22, 2022.
 - `./data/raw/11-mlab`: This directory holds monthly median download speeds measured by MLAB's NDT tests for all countries in the LACNIC region.
 - `./data/raw/12-20-google-dns`: This directory offers files for per-probe monthly RTT measurements to Google Public DNS resolvers from RIPE Atlas probes in the LACNIC region since 2014 (measurement ID: 1591146).
@@ -66,8 +66,8 @@ Description of files/directories:
 
 #### External data
 
-- `./data/processed/01-a-crude_oil_production.csv`: Contains crude oil production data as reported by the OECD.
-- `./data/processed/rir.csv`: Provides a list of Regional Internet Registries (RIRs).
+- `./data/external/01-a-crude_oil_production.csv`: Contains crude oil production data as reported by the OECD.
+- `./data/external/rir.csv`: Provides a list of Regional Internet Registries (RIRs).
 
 If any of the external links or information on this page are broken or out of date, please feel free to create an issue on this repository.
 
