@@ -31,12 +31,15 @@ Before running the notebooks, we highly recommend creating a virtual environment
    pip3 install -r requirements.txt
    ```
 
+If the previous command encounters issues installing `rootpath`, please install it manually.
+
 
 ## Repository structure
 
 ### Data (`./data/`)
 
 The `./data/` directory can be downloaded from this [link to Google Drive](https://drive.google.com/drive/folders/17U65vO1cG6QT-MWw0eovgRVR-J1DUK-P).
+
 
 <b style="color: red;">Please note: Some datasets in this repository need to be retrieved using scripts. Carefully read the instructions provided in the sections below.</b>
 
@@ -67,6 +70,11 @@ Description of files/directories:
 
 - `./data/external/01-a-crude_oil_production.csv`: Contains crude oil production data as reported by the OECD.
 - `./data/external/rir.csv`: Provides a list of Regional Internet Registries (RIRs).
+
+#### Submarine Cable Replicability
+
+Our analysis used a snapshot of Telegeography's Submarine Cable Map from 2021, back when the data was publicly accessible. As this data is now restricted, users interested in replicating this analysis will need to provide their own dataset.
+
 
 If any of the external links or information on this page are broken or out of date, please feel free to create an issue on this repository.
 
